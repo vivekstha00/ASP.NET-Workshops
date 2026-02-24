@@ -1,0 +1,30 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 30px;
+    background: #fff;
+    color: #000;
+}
+h1 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+th, td {
+    border: 1px solid #ccc;
+    padding: 10px 14px;
+    text-align: left;
+}
+th {
+    background: #f0f0f0;
+    font-weight: bold;
+}
+tr:nth-child(even) {
+    background: #fafafa;
+}
+#status {
+    margin-bottom: 12px;
+    color: #555;
+}
