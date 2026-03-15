@@ -1,3 +1,5 @@
+using ProductAPI;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,17 +9,21 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-
-builder.Services.AddCors(options => {
-    options.AddPolicy("AllowAAllOrigin", policy => {
-        policy.AllowAnyOrigin()
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
+// builder.Services.Configure<OpenApiOptions>(
+//     builder.Configuration.GetSection(OpenApiOptions.SectionName));
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<GetNetworkService>();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+        policy =>
+        {
+            policy.AllowAnyOrigin() // Use AllowAnyOrigin() with caution
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
 });
-
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -27,10 +33,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-app.UseStaticFiles();
-
-app.UseCors("AllowAAllOrigin");
+app.UseCors("AllowAllOrigins");
 
 app.UseAuthorization();
 
