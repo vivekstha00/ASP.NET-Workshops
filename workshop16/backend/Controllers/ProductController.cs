@@ -62,7 +62,6 @@ public class ProductController : ControllerBase
             Console.WriteLine($"{header.Key} : {header.Value}");
         }
 
-        HttpContext.Response.Headers.Add("College", "Informatics");
         Console.WriteLine($"User local ip is {_myService.GetUserIP()}");
 
         return Ok(products);
