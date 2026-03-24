@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using WeatherAPI.Models;
 
 namespace ProductAPI;
 
@@ -6,5 +7,50 @@ public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options) { }
+    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        // Composite Key: OrderItem
+        modelBuilder.Entity<OrderItem>()
+            .HasKey(oi => new { oi.OrderId, oi.ProductId });
+
+        // Configure relationships
+
+        // Category - Product (1-M)
+        modelBuilder.Entity<Category>()
+            .HasMany(c => c.Products)
+            .WithOne(p => p.Category)
+            .HasForeignKey(p => p.CategoryId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Supplier - Product (1-M)
+        modelBuilder.Entity<Supplier>()
+            .HasMany(s => s.Products)
+            .WithOne(p => p.Supplier)
+            .HasForeignKey(p => p.SupplierId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Customer - Order (1-M)
+        modelBuilder.Entity<Customer>()
+            .HasMany(c => c.Orders)
+            .WithOne(o => o.Customer)
+            .HasForeignKey(o => o.CustomerId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Order - OrderItem (1-M)
+        modelBuilder.Entity<Order>()
+            .HasMany(o => o.OrderItems)
+            .WithOne(oi => oi.Order)
+            .HasForeignKey(oi => oi.OrderId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Product - OrderItem (1-M)
+        modelBuilder.Entity<Product>()
+            .HasMany(p => p.OrderItems)
+            .WithOne(oi => oi.Product)
+            .HasForeignKey(oi => oi.ProductId)
+            .OnDelete(DeleteBehavior.Restrict);
+    }
+
 
 }
